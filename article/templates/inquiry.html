@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Contact | Prototyping Labo{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}
+<section class="js-parallax u-promo-block u-promo-block--mheight-600 u-overlay u-overlay--dark text-white" style="background-image: url({% static 'img/background2.jpg' %});">
+  <!-- Promo Content -->
+  <div class="container u-overlay__inner u-ver-center u-content-space">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="text-center">
+          <p class="text-uppercase u-letter-spacing-sm mb-0">Exploring Your Ideas</p>
+          <h1 class="display-sm-4 display-lg-3 mb-3"><span class="js-display-typing"></span></h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Promo Content -->
+</section>
+{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block contents %}
+<section class="u-content-space">
+    <div class="container">
+
+      <header class="text-center w-md-50 mx-auto mb-8">
+        <h2 class="h1">Send Your Feedback</h2>
+        <p class="h5">Your feedback will help improve the UI / UX and functionality of this application</p>
+      </header>
+
+      <form class="text-center w-md-75 mx-auto" method="POST">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+        <div class="row" style="justify-content: center;">
+            <div class="col-lg-6 form-group mb-4">
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-center">
+          <button class="btn btn-lg btn-primary py-3 px-4" type="submit">Send</button>
+        </div>
+      </form>
+      
+    </div>
+  </section>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).on('ready', function () {
+      // initialization of text animation (typing)
+      $(".js-display-typing").typed({
+        strings: [
+          "Prototyping Labo",
+        ],
+        typeSpeed: 60,
+        loop: true,
+        backDelay: 2500
+      });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Sigun Up | Prototyping Labo{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block active_login %}active{% endblock %}
+
+{% block contents %}
+<section class="u-content-space">
+    <div class="container">
+        <header class="text-center w-md-50 mx-auto mb-8">
+            <h2 class="h1">Create Account</h2>
+        </header>
+        {% if confirmation %}
+        <p>Press the button below to confirm your registration</p>
+            <form class="text-center w-md-75 mx-auto" method="POST" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <div class="text-center">
+                    <button class="btn btn-lg btn-primary py-3 px-4" type="submit">Confirm</button>
+                </div>
+            </form>
+        {% else %}
+        {% url 'account_email' as email_url %}
+            <p>The link has expired<a href="{{ email_url }}">Try aggain</a>.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}{% endblock %}

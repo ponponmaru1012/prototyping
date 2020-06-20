@@ -1,0 +1,181 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <!-- Head -->
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+
+    <!-- Web Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Playfair+Display:400,700%7COpen+Sans:300,400,600,700" rel="stylesheet">
+
+    <!-- Bootstrap Styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/bootstrap/css/bootstrap.css' %}">
+
+    <!-- Components Vendor Styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/font-awesome/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/slick-carousel/slick.css' %}">
+
+    <!-- Theme Styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+    <style type="text/css">
+    </style>
+
+    {% block head %}{% endblock %}
+
+  </head>
+  <!-- End Head -->
+
+  <body>
+    <!-- Header -->
+    <header>
+      <!-- Navbar -->
+      <nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'article:index' %}">
+            <img src="{% static 'img/logo-white.png' %}" alt="Prototyping Labo" style="width: 100px;">
+          </a>
+
+          <button class="navbar-toggler" type="button"
+                  data-toggle="collapse"
+                  data-target="#navbarTogglerDemo"
+
+                  aria-controls="navbarTogglerDemo"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          {% block search %}{% endblock %}
+
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+              <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link active" href="{% url 'article:index' %}">Home</a>
+              </li>
+              <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link" href="#">About</a>
+              </li>
+
+              {% if user.is_authenticated %}
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                  <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle u-box-shadow-sm mr-2" width="35" height="35" src="{% static 'img/cpu.png' %}" alt="Icon"> John Doe <i class="fas fa-angle-down small ml-1"></i>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href="#">Account Settings</a>
+                    <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a>
+                    </div>
+                </li>
+              </ul>
+              {% else %}
+              <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
+              </li>
+              <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
+              </li>
+              {% endif %}
+
+              <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link" href="{% url 'article:inquiry' %}">Contacts</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+
+      {% block background %}{% endblock %}
+    </header>
+    <!-- End Header -->
+
+    <!--メッセージの出力-->
+    {% if messages %}
+    {% for message in messages %}
+    <div  {% if message.tags %} class="alert {{ message.tags }} text-white fade show rounded-0" role="alert" {% endif %}>
+      <div class="container d-flex">
+        <div class="alert__icon mr-3">
+          <i class="fas {% if message.tags == 'bg-info' %}fa-info-circle
+          {% elif message.tags == 'bg-success' %}fa-check-circle
+          {% elif message.tags == 'bg-warning' %}fa-exclamation-triangle
+          {% else %}fa-minus-circle
+          {% endif %}"></i>
+        </div>
+
+        <div class="align-self-center mr-3">{{ message }}</div>
+
+        <div class="ml-auto">
+          <button type="button" class="alert__close alert__close--light" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+   <!--End メッセージの出力-->
+
+    <main role="main">
+      {% block category %}{% endblock %}
+      
+      {% block contents %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 text-center text-md-left mb-3 mb-md-0">
+            <small class="text-white">&copy; 2020 <a class="text-white" href="{% url 'article:index' %}">Prototyping Labo</a>. All Rights Reserved.</small>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- End Footer -->
+
+    <!-- JAVASCRIPTS (Load javascripts at bottom, this will reduce page load time) -->
+    <!-- Global Vendor -->
+    <script src="{% static 'vendors/jquery.min.js' %}"></script>
+    <script src="{% static 'vendors/jquery.migrate.min.js' %}"></script>
+    <script src="{% static 'vendors/popper.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- Components Vendor  -->
+    <script src="{% static 'vendors/jquery.parallax.js' %}"></script>
+    <script src="{% static 'vendors/typedjs/typed.min.js' %}"></script>
+    <script src="{% static 'vendors/slick-carousel/slick.min.js' %}"></script>
+    <script src="{% static 'vendors/counters/waypoint.min.js' %}"></script>
+    <script src="{% static 'vendors/counters/counterup.min.js' %}"></script>
+
+    <!-- Theme Settings and Calls -->
+    <script src="{% static 'js/global.js' %}"></script>
+
+    <!-- Theme Components and Settings -->
+    <script src="{% static 'js/vendors/parallax.js' %}"></script>
+    <script src="{% static 'js/vendors/carousel.js' %}"></script>
+    <script src="{% static 'js/vendors/counters.js' %}"></script>
+    <!-- END JAVASCRIPTS -->
+
+    
+    {% block js %}{% endblock %}
+    
+  </body>
+  <!-- End Body -->
+</html>
