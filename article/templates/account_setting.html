@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Account Setting | Prototyping Labo{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block contents %}
+<section class="u-content-space">
+    <div class="container">
+
+      <header class="text-center w-md-50 mx-auto mb-8">
+        <h2 class="h1">Account Settings</h2>
+      </header>
+
+      <form class="text-center w-md-75 mx-auto" method="POST">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+        <div class="row" style="justify-content: center;">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label_tag }}
+            </label>
+            <div class="col-lg-6 form-group mb-4">
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-center">
+          <p><a class="button secondaryAction" href="{% url 'article:password_change' %}">Change password? Click here</a></p>
+          <div class="text-center">
+            <button class="btn btn-lg btn-primary py-3 px-4" type="submit">Change</button>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+  </section>
+{% endblock %}
+
+{% block js %}{% endblock %}

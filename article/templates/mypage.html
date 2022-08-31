@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}My Page | Prototyping Labo{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}
+<section class="js-parallax u-promo-block u-promo-block--mheight-500 u-overlay u-overlay--dark text-white" {% if object.bg_image %} style="background-image:url('{{ object.bg_image.url }}');"{% else %} style="background-image:url('{% static 'img/bg_image_default.png' %}');"{% endif %}>
+  <!-- Promo Content -->
+  <div class="container u-overlay__inner u-ver-center u-content-space">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="text-center">
+          <h1 class="display-sm-4 display-lg-3">{{ object.username }}</h1>
+          {% if object.profession %}
+          <p class="h6 text-uppercase u-letter-spacing-sm mb-2"> {{ object.profession }}</p>
+          {%  endif %}
+          <ul class="list-inline text-center mb-0">
+            {% if object.fb_link %}
+            <li class="list-inline-item mx-2" data-toggle="tooltip" data-placement="top" title="Facebook">
+              <a class="text-white" href="{{ object.fb_link }}">
+                <i class="fab fa-facebook"></i>
+              </a>
+            </li>
+            {% endif %}
+            {% if object.tw_link %}
+            <li class="list-inline-item mx-2" data-toggle="tooltip" data-placement="top" title="Twitter">
+              <a class="text-white" href="{{ object.tw_link }}">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            {% endif %}
+            {% if object.ig_link %}
+            <li class="list-inline-item mx-2" data-toggle="tooltip" data-placement="top" title="Instagram">
+              <a class="text-white" href="{{ object.ig_link }}">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Promo Content -->
+</section>
+{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block contents %}
+<section>
+  <div class="container">
+    <!-- Profile Block -->
+    <div class="row">
+      <div class="col-md-4 mx-auto">
+        <div class="u-pull-half text-center">
+        {% if object.icon %}
+          <img class="img-fluid u-avatar u-box-shadow-lg rounded-circle mb-3" width="200" height="auto" src="{{ object.icon.url }}" alt="Image Description">
+        {% else %}
+          <img class="img-fluid u-avatar u-box-shadow-lg rounded-circle mb-3" width="200" height="auto" src="{% static 'img/default_icon.png' %}" alt="Image Description">
+        {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- End Profile Block -->
+
+    <!-- About -->
+    <div class="row u-content-space-bottom">
+      <div class="col-lg-6 mb-5 mb-lg-5 pl-lg-5 mx-auto">
+        {% if object.introduction %}
+        <h4 class="mb-3">About me</h4>
+        <p>{{ object.introduction }}</p>
+        {% endif%}
+      </div>
+    </div>
+    <!-- End About  -->
+  </div>
+</section>
+<!-- End About Section -->
+
+<div class="container">
+  <hr class="my-0">
+</div>
+
+<!-- Portfolio -->
+<section class="u-content-space">
+  <div class="container">
+    <header class="text-center w-md-50 mx-auto mb-8">
+      <h2 class="h1">Prototyping Works</h2>
+    </header>
+
+    <ul class="js-shuffle-controls u-portfolio-controls text-center mb-5">
+      <li class="u-portfolio-controls__item"><a href="#!" data-group="all" class="active">All</a></li>
+      <li class="u-portfolio-controls__item"><a href="#!" data-group="its-illustration">Illustration</a></li>
+      <li class="u-portfolio-controls__item"><a href="#!" data-group="its-design">Design</a></li>
+      <li class="u-portfolio-controls__item"><a href="#!" data-group="its-graphic">Graphic</a></li>
+      <li class="u-portfolio-controls__item"><a href="#!" data-group="its-logo">Logo</a></li>
+    </ul>
+
+    <!-- Work Content -->
+    <div class="js-shuffle u-portfolio row no-gutters mb-6">
+      <figure class="col-sm-6 col-md-4 u-portfolio__item" data-groups='["its-illustration"]'>
+        <img class="u-portfolio__image" src="assets/img-temp/portfolio/img1.jpg" alt="Image Description">
+        <figcaption class="u-portfolio__info">
+          <h6 class="mb-0">IX Project</h6>
+          <small class="d-block">Branding</small>
+        </figcaption>
+        <a class="js-popup-image u-portfolio__zoom" href="assets/img-temp/portfolio/img1.jpg">Zoom</a>
+      </figure>
+
+      <figure class="col-sm-6 col-md-4 u-portfolio__item" data-groups='["its-design"]'>
+        <img class="u-portfolio__image" src="assets/img-temp/portfolio/img2.jpg" alt="Image Description">
+        <figcaption class="u-portfolio__info">
+          <h6 class="mb-0">Bottle Design</h6>
+          <small class="d-block">Mockup</small>
+        </figcaption>
+        <a class="js-popup-image u-portfolio__zoom" href="assets/img-temp/portfolio/img2.jpg">Zoom</a>
+      </figure>
+
+      <figure class="col-sm-6 col-md-4 u-portfolio__item" data-groups='["its-graphic"]'>
+        <img class="u-portfolio__image" src="assets/img-temp/portfolio/img3.jpg" alt="Image Description">
+        <figcaption class="u-portfolio__info">
+          <h6 class="mb-0">App Developement</h6>
+          <small class="d-block">Åpp</small>
+        </figcaption>
+        <a class="js-popup-image u-portfolio__zoom" href="assets/img-temp/portfolio/img3.jpg">Zoom</a>
+      </figure>
+
+      <figure class="col-sm-6 col-md-4 u-portfolio__item" data-groups='["its-logo"]'>
+        <img class="u-portfolio__image" src="assets/img-temp/portfolio/img4.jpg" alt="Image Description">
+        <figcaption class="u-portfolio__info">
+          <h6 class="mb-0">Just Bored</h6>
+          <small class="d-block">Freetime</small>
+        </figcaption>
+        <a class="js-popup-image u-portfolio__zoom" href="assets/img-temp/portfolio/img4.jpg">Zoom</a>
+      </figure>
+
+      <figure class="col-sm-6 col-md-4 u-portfolio__item" data-groups='["its-illustration"]'>
+        <img class="u-portfolio__image" src="assets/img-temp/portfolio/img5.jpg" alt="Image Description">
+        <figcaption class="u-portfolio__info">
+          <h6 class="mb-0">Cake Lab</h6>
+          <small class="d-block">Graphic</small>
+        </figcaption>
+        <a class="js-popup-image u-portfolio__zoom" href="assets/img-temp/portfolio/img5.jpg">Zoom</a>
+      </figure>
+
+      <figure class="col-sm-6 col-md-4 u-portfolio__item" data-groups='["its-graphic"]'>
+        <img class="u-portfolio__image" src="assets/img-temp/portfolio/img6.jpg" alt="Image Description">
+        <figcaption class="u-portfolio__info">
+          <h6 class="mb-0">NB Project</h6>
+          <small class="d-block">Logo</small>
+        </figcaption>
+        <a class="js-popup-image u-portfolio__zoom" href="assets/img-temp/portfolio/img6.jpg">Zoom</a>
+      </figure>
+
+      <!-- sizer -->
+      <figure class="col-sm-6 col-md-4 u-portfolio__item shuffle_sizer"></figure>
+    </div>
+    <!-- End Work Content -->   
+  </div>
+</section>
+<!-- End Portfolio -->
+{% endblock %}
+
+{% block js %}{% endblock %}

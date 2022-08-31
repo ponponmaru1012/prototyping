@@ -42,7 +42,7 @@
     <!-- Header -->
     <header>
       <!-- Navbar -->
-      <nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg navbar-dark">
+      <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #672e8d;">
         <div class="container-fluid">
           <a class="navbar-brand" href="{% url 'article:index' %}">
             <img src="{% static 'img/logo-white.png' %}" alt="Prototyping Labo" style="width: 100px;">
@@ -73,11 +73,12 @@
               <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                   <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle u-box-shadow-sm mr-2" width="35" height="35" src="{% static 'img/cpu.png' %}" alt="Icon"> John Doe <i class="fas fa-angle-down small ml-1"></i>
+                    <img class="rounded-circle u-box-shadow-sm mr-2" width="35" height="35" {% if user.icon %}  src="{{ user.icon.url }}" {% else %} src="{% static 'img/default_icon.png' %}" {% endif %} alt="Icon"> {{ user.get_username }} <i class="fas fa-angle-down small ml-1"></i>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Account Settings</a>
+                    <a class="dropdown-item" href="{% url 'article:mypage' user.username %}">Profile</a>
+                    <a class="dropdown-item" href="{% url 'article:profile_setting' user.username %}">Profile Settings</a>
+                    <a class="dropdown-item" href="{% url 'article:account_setting' user.username %}">Account Settings</a>
                     <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a>
                     </div>
@@ -125,10 +126,9 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
       </div>
     </div>
-    {% endfor %}
+    {% endfor %}    
     {% endif %}
    <!--End メッセージの出力-->
 
@@ -143,7 +143,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 text-center text-md-left mb-3 mb-md-0">
-            <small class="text-white">&copy; 2020 <a class="text-white" href="{% url 'article:index' %}">Prototyping Labo</a>. All Rights Reserved.</small>
+            <small class="text-white">&copy; 2022 <a class="text-white" href="{% url 'article:index' %}">Prototyping Labo</a>. All Rights Reserved.</small>
           </div>
         </div>
       </div>

@@ -1,5 +1,9 @@
 from django import forms
 from django.core.mail import EmailMessage
+from django.contrib.auth.forms import PasswordChangeForm
+from django.core.exceptions import ValidationError
+
+from accounts.models import CustomUser
 
 
 class InquiryForm(forms.Form):
@@ -41,3 +45,52 @@ class InquiryForm(forms.Form):
         message = EmailMessage(subject=subject, body=message, from_email=from_email, to=to_list, cc=cc_list)
         message.send()
 
+class AccountSettingForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control form-control-lg'
+
+class ProfileSettingForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('fb_link', 'ig_link', 'tw_link', 'icon', 'bg_image', 'profession', 'introduction',)
+
+    def clean_fb_link(self):
+        fb_link = self.cleaned_data['fb_link']
+        if (fb_link is not None) and ('facebook' not in str(fb_link)):
+            raise ValidationError('Please enter your Facebook link')
+        return fb_link
+
+    def clean_ig_link(self):
+        ig_link = self.cleaned_data['ig_link']
+        if (ig_link is not None) and ('instagram' not in str(ig_link)):
+            raise ValidationError('Please enter your Instagram link')
+        return ig_link
+
+    def clean_tw_link(self):
+        tw_link = self.cleaned_data['tw_link']
+        if (tw_link is not None) and ('twitter' not in str(tw_link)):
+            raise ValidationError('Please enter your Twitter link')
+        return tw_link 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control form-control-lg'
+
+
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    """パスワード変更フォーム"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control form-control-lg'
