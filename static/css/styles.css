@@ -1037,7 +1037,15 @@ h1, h2, h3, h4, h5, h6 {
   transition: all .2s ease;
 }
 
-.u-portfolio__item:hover .u-portfolio__image {
+.u-portfolio__image_original {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: all .2s ease;
+  object-fit: cover;
+}
+
+.u-portfolio__item:hover .u-portfolio__image .u-portfolio__image_original {
   transform: translate3d(0, -60px, 0);
 }
 
@@ -1298,4 +1306,141 @@ h1, h2, h3, h4, h5, h6 {
 .original-box{
   width: calc(100% / 4);
   margin: 10px;
+}
+
+/*----------------------------------
+  Comment Style
+------------------------------------*/
+.comment-btn {
+  background-color: #72c7e6;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  transition: 0.5s;
+}
+.comment-btn:hover {
+  background-color: #49add1;
+  color: #fff;
+  transition: 0.5s;
+}
+
+.comment-respond { /*入力欄全体の枠*/
+  border: 2px solid #72c7e6;
+  margin-top: -2px;
+}
+.comment-respond p {
+  margin: 1em 0;
+}
+#commentform { /*フォーム部分の枠*/
+  padding: 20px;
+}
+p.comment-notes { /*注意書きの文字サイズ*/
+  font-size: 14px;
+}
+p.form-submit {
+  margin: 2em 0 1em 0;
+}
+#commentform input[type="text"], #commentform textarea { /*入力スペースの装飾*/
+  padding: 11px;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  width: 100%;
+  background: #e2e2e2; /*入力スペースの背景色*/
+}
+#commentform input[type="submit"] { /*送信ボタンの装飾*/
+  -webkit-appearance: none;
+  padding: 11px;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+  background: #72c7e6;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  transition: 0.5s;
+}
+#commentform input[type="submit"]:hover { /*送信ボタンのマウスホバー時*/
+  background: #49add1;
+  transition: 0.5s;
+}
+
+.comment-list { /*全体の枠*/
+  border: 2px solid #72c7e6;
+  padding: 0;
+  border-radius: 10px 10px 0 0;
+}
+.comment-title { /*タイトルの装飾*/
+  margin: 0;
+  font-size: 24px;
+  background: #72c7e6;
+  color: #fff;
+  padding-left: 20px;
+  font-weight: normal;
+}
+
+.commets-list {
+  padding: 20px 20px 0 20px;
+}
+.commets-list > li {
+  border-top: 2px dashed #72c7e6; /*スレッドを区切る点線*/
+  margin: 30px 0;
+  padding-top: 20px;
+}
+.commets-list > li:first-child {
+  border: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+.commets-list .children {
+  border-left: 2px solid #ccc; /*返信コメントの左側のボーダー*/
+  margin: 0;
+}
+.commets-list .avatar { /*アバターの位置調整*/
+  float: left;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.comment-content { /*コメントの吹き出し*/
+  background: #e2e2e2;
+  padding: 2px 10px;
+  margin: 10px 0 6px 0;
+  border-radius: 10px;
+  position: relative;
+}
+.comment-content::before { /*吹き出しの三角部分*/
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50px;
+  border-style: solid;
+  border-color: transparent transparent #e2e2e2 transparent;
+  border-width: 0 20px 20px 0;
+}
+.comment-content p { /*吹き出し内の文字を調整*/
+  font-size: 14px;
+  margin: 1em 0;
+  line-height: 1.5em;
+}
+
+.reply {
+  text-align: right;
+  font-size: 1em;
+}
+
+.comment-reply-link { /*返信ボタンの装飾*/
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  background: #72c7e6;
+  padding: 1px 12px;
+  transition: 0.5s;
+}
+.comment-reply-link:hover { /*返信ボタンのマウスホバー時*/
+  color: #fff;
+  background: #49add1;
+  transition: 0.5s;
+}
+.commets-list .comment-body {
+  margin-bottom: 0;
 }

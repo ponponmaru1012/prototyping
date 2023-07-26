@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls import url
 from django.urls import path, include
 from accounts import views
 from django.contrib.staticfiles.urls import static
@@ -25,8 +26,15 @@ urlpatterns = [
     path('', include('article.urls')),
     path('accounts/confirm-email/', views.EmailConfirmView.as_view(), name='confirm-email'),
     path('accounts/', include('allauth.urls')),
+    url(r'mdeditor/', include('mdeditor.urls')),
 ]
 
 
 #開発サーバーでメディアを配信できるようにする設定
 urlpatterns += static(settings_common.MEDIA_URL, document_root=settings_dev.MEDIA_ROOT)
+
+"""
+if settings_common.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+"""

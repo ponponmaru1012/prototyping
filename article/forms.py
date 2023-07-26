@@ -4,6 +4,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
 
 from accounts.models import CustomUser
+from .models import Article, Comment, SubComment
 
 
 class InquiryForm(forms.Form):
@@ -94,3 +95,24 @@ class MyPasswordChangeForm(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control form-control-lg'
+
+class ArticleCreateForm(forms.ModelForm):
+    class Meta:
+        model = Article 
+        fields = ("thumbnail","title", "content",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control form-control-lg'
+
+class CommentCreateForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ("content",)
+
+class CommentReplyForm(forms.ModelForm):
+    class Meta:
+        model = SubComment
+        fields = ("content",)

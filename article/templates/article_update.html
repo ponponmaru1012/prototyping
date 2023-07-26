@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load markdown_extras %}
+
+{% load static %}
+
+{% block title %}Edit Article | Prototyping Labo{% endblock %}
+
+{% block head %}
+<link href="{% static 'mdeditor/css/editormd.min.css' %}" rel="stylesheet">
+<link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block contents %}
+<section class="u-content-space">
+    <div class="container">
+
+      <header class="text-center w-md-50 mx-auto mb-8">
+        <h2 class="h1">Modify Your Article</h2>
+      </header>
+
+      <form class="text-center w-md-75 mx-auto" method="POST" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+        {{ form.media }}
+
+        {% for field in form %}
+        <div class="row" style="justify-content: center;">
+          <label for="{{ field.id_for_label }}" class="u-font-size-90">
+            <strong>{{ field.label_tag }}</strong>
+          </label>
+            <div class="col-xl-12 form-group mb-4">
+                {{ field|markdown|safe }}
+                {{ field.errors }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-center">
+          <button class="btn btn-lg btn-primary py-3 px-4" type="submit">Update</button>
+          <a class="btn btn-lg btn-primary py-3 px-4" href="{% url 'article:article_detail' object.pk %}">Cancel</a>
+        </div>
+      </form>
+      
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'mdeditor/js/jquery.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/raphael.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/underscore.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/sequence-diagram.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/flowchart.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/jquery.flowchart.min.js' %}"></script>
+<script>
+$(function () {
+    editormd.markdownToHTML("content", {
+        emoji           : true,
+        taskList        : true,
+        tex             : true, 
+        flowChart       : true,
+        sequenceDiagram : true,
+    });
+    $(".reference-link").each(function (i,obj) {
+      console.log(obj)
+    })
+})
+</script>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}My Page | Prototyping Labo{% endblock %}
+{% block title %}{% for s in customuser_list %}{{ s.username }}{% endfor %} | Prototyping Labo{% endblock %}
 
 {% block head %}{% endblock %}
 

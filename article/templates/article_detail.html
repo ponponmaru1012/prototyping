@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+
+{% load markdown_extras %}
+
+{% load static %}
+
+{% block title %}{{ object.title|truncatechars:6 }} | Prototyping Labo{% endblock %}
+
+{% block head %}
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/22e0c795a5.js" crossorigin="anonymous"></script>
+
+<link href="{% static 'mdeditor/css/editormd.min.css' %}" rel="stylesheet">
+<link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}
+<section class="js-parallax u-promo-block u-promo-block--mheight-500 u-overlay u-overlay--dark text-white" style="background-image:url('{{ object.thumbnail.url }}')">
+  
+  <!-- サムネイルとタイトル -->
+  <div class="container u-overlay__inner u-ver-center u-content-space">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="text-center">
+          <h1 class="display-sm-4 display-lg-3">{{ object.title }}</h1>
+          <p class="h6 text-uppercase u-letter-spacing-sm mb-2"><a class="h6 text-uppercase u-letter-spacing-sm mb-2" href="{% if request.user == article.post_user %}{% url 'article:mypage' article.post_user %}{% else %}{% url 'article:userpage' article.post_user.username %}{% endif %}">by {{ object.post_user }}</a></p>
+          <p class="h6 text-uppercase u-letter-spacing-sm mb-2">{{ object.view_count }} view</p>
+          <p class="h6 text-uppercase u-letter-spacing-sm mb-2">Posted:{{ object.created_at }} | {% if object.updated_at %}Updated:{{ object.updated_at }}{% endif %}</p>
+            {% if is_user_liked_for_article %}
+            <button type="button" id="ajax-like-for-post" style="border:none;background:none">
+            <!-- すでにイイねしている時はfasクラス -->
+              <i class="fas fa-heart text-danger" id="like-for-post-icon"></i>
+            </button>
+            {% else %}
+            <button type="button" id="ajax-like-for-post" style="border:none;background:none">
+              <!-- イイねしていないときはfarクラス -->
+              <i class="far fa-heart text-danger" id="like-for-post-icon"></i>
+            </button>
+            {% endif %}
+          <!-- イイねの数 -->
+          <span id="like-for-post-count">{{ like_for_article_count }}</span>
+          <span>Likes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block contents %}
+
+
+<section style="margin-bottom: 2rem;">
+  {% if user ==  object.post_user %}
+  <div class="container">
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="rounded-circle u-box-shadow-sm mr-2" width="25" height="25" src="{% static 'img/three_dots_icon.png' %}"alt="Icon">
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'article:article_update' object.pk %}">Edit</a>
+          <a class="dropdown-item" href="{% url 'article:article_delete' object.pk %}">Delete</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="container">
+    <!-- コンテンツエリア -->
+    <div class="row u-content-space-bottom">
+        {{ object.content|markdown|safe }}
+    </div>
+    
+    <!-- コメント表示エリア -->
+    {% if comment_list %}
+    <section class="comment-list">
+      <h2 id="comments" class="comment-title"><i class="fa-regular fa-comments"></i> comment</h2>
+      {% for comment in comment_list %}
+      <div class="commets-list">
+        <li class="comment even thread-even depth-1 parent" id="comment-18730" style="list-style:none">
+          <div id="div-comment-18730" class="comment-body article">
+            <div class="comment-author vcard">
+                <img alt="icon" {% if comment.writer.icon %} src="{{ comment.writer.icon.url }}" {% else %} src="{% static 'img/default_icon.png' %}" {% endif %} class="avatar avatar-55 photo" height="55" width="55">
+                  <a href="{% url 'article:userpage' comment.writer %}">{{ comment.writer }}</a>
+            </div>
+            <div class="comment-meta commentmetadata">
+              <p>{{ comment.created_at|date:"Y-m-j" }}</p>
+            </div>
+
+            {% if user ==  comment.writer %}
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img class="rounded-circle u-box-shadow-sm mr-2" width="25" height="25" src="{% static 'img/three_dots_icon.png' %}" alt="Icon">
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'article:comment_update' comment.pk %}">Edit</a>                                
+                  <a class="dropdown-item" id="showModal2" data-toggle="modal" data-target="#deleteModal-{{ comment.pk }}">Delete</a>
+                </div>
+
+                <!-- コメント編集モーダルダイアログ  
+                <div class="modal fade bd-example-modal-lg" id="commentModal-{{ comment.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Your Comment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <form class="text-center w-md-75 mx-auto" method="POST" enctype="multipart/form-data" action="{% url 'article:comment_update' comment.pk %}">
+                        <div class="modal-body">  
+                          {% csrf_token %}
+                          {{ form.non_field_errors }}
+                          {{ form.media }}
+
+                          {% for field in form %}                        
+                          <div class="col-xl-12 form-group mb-4">    
+                            {{ field|markdown|safe }}
+                            {{ field.errors }}
+                          </div>
+                          {% endfor %}
+                          <p>{{ comment.content|markdown|safe }}</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-lg btn-primary py-3 px-4" data-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-lg btn-primary py-3 px-4">Save changes</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              -->
+
+                <!-- コメント削除モーダルダイアログ -->
+                <div class="modal fade bd-example-modal-lg" id="deleteModal-{{ comment.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Do you really want to delete your comment?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>{{ comment.content|markdown|safe }}</p>
+                      </div>
+                      <div class="modal-footer">
+                        <form method="POST" action="{% url 'article:comment_delete' comment.pk %}">
+                          {% csrf_token %}
+                          <button type="button" class="btn btn-lg btn-primary py-3 px-4" data-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-lg btn-primary py-3 px-4">Delete</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </li>
+            </ul>
+            {% endif %}
+
+          <div class="comment-content">
+            <p>{{ comment.content|markdown|safe }}</p>
+          </div>
+          {% if user.is_authenticated %}
+          <div class="reply">
+            <a class="comment-reply-link" href="{% url 'article:reply_create' comment.pk %}"><span class="fa fa-comment-o"></span> Reply</a>
+          </div>
+          {% endif %}
+        </div>
+
+          {% if comment.subcomment_set.all %}
+          {% for reply in comment.subcomment_set.all %}
+          <ul class="children">
+            <li class="comment byuser comment-author-dice bypostauthor odd alt depth-2" id="comment-18741" style="list-style:none">
+              <div id="div-comment-18741" class="comment-body article">
+                <div class="comment-author vcard">
+                  <img alt="" {% if reply.writer.icon %} src="{{ reply.writer.icon.url }}" {% else %} src="{% static 'img/default_icon.png' %}" {% endif %} class="avatar avatar-55 photo" height="55" width="55"><a href="{% url 'article:userpage' reply.writer %}">{{ reply.writer }}</a>
+                </div>
+                <div class="comment-meta commentmetadata">
+                  <p>{{ reply.created_at }}</p>
+                </div>
+
+                {% if user ==  reply.writer %}
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <img class="rounded-circle u-box-shadow-sm mr-2" width="25" height="25" src="{% static 'img/three_dots_icon.png' %}" alt="Icon">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'article:reply_update' reply.pk %}">Edit</a>                                
+                      <a class="dropdown-item" id="showModal3" data-toggle="modal" data-target="#replydeleteModal-{{ reply.pk }}">Delete</a>
+                    </div>
+
+                    <!-- リプライ削除モーダルダイアログ -->
+                    <div class="modal fade bd-example-modal-lg" id="replydeleteModal-{{ reply.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Do you really want to delete your reply?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>{{ reply.content|markdown|safe }}</p>
+                          </div>
+                          <div class="modal-footer">
+                            <form method="POST" action="{% url 'article:reply_delete' reply.pk %}">
+                              {% csrf_token %}
+                              <button type="button" class="btn btn-lg btn-primary py-3 px-4" data-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-lg btn-primary py-3 px-4">Delete</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                {% endif %}
+
+                <div class="comment-content">
+                  <p>{{ reply.content|markdown|safe }}</p>
+                </div>
+                <div class="reply">
+                  <a class="comment-reply-link" href="{% url 'article:reply_create' comment.pk %}"><span class="fa fa-comment-o"></span> Reply</a>
+                </div>
+              </div>
+            </li>
+          </ul>
+          {% endfor %}
+          {% endif %}
+        </li>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+    <!-- コメントフォーム -->
+    {% if user.is_authenticated %}
+    <h2 class="h1" style="justify-content: center; margin-top: 6rem;">Comment</h2>
+    <form method="POST" action="{% url 'article:comment_create' article.pk %}">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      
+      {% for field in form %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-xl-12 form-group mb-4">
+          {{ form.media }}
+          {{ field|markdown|safe }}
+          {{ field.errors }}
+        </div>
+      </div>
+      {% endfor %}
+      <div class="text-center">
+        <button class="btn btn-lg btn-primary py-3 px-4" type="submit" style="margin-bottom: 2rem;">Comment</button>
+      </div>  
+    </form>
+    {% endif %}
+  </div>
+  
+</section>
+
+<div class="container">
+  <hr class="my-0">
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+  /* ポストに対するイイね */
+  document.getElementById('ajax-like-for-post').addEventListener('click', e => {
+    e.preventDefault();
+    const url = '{% url "article:like_for_article" %}';
+    fetch(url, {
+      method: 'POST',
+      body: `article_pk={{article.pk}}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+    }).then(response => {
+      return response.json();
+    }).then(response => {
+      // イイね数を書き換える
+      const counter = document.getElementById('like-for-post-count')
+      counter.textContent = response.like_for_article_count
+      const icon = document.getElementById('like-for-post-icon')
+      // 作成した場合はハートを塗る
+      if (response.method == 'create') {
+        icon.classList.remove('far')
+        icon.classList.add('fas')
+        icon.id = 'like-for-post-icon'
+      } else {
+        icon.classList.remove('fas')
+        icon.classList.add('far')
+        icon.id = 'like-for-post-icon'
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  });
+</script>
+<script src="{% static 'mdeditor/js/jquery.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/raphael.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/underscore.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/sequence-diagram.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/flowchart.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/jquery.flowchart.min.js' %}"></script>
+<script>
+$(function () {
+    editormd.markdownToHTML("content", {
+        emoji           : true,
+        taskList        : true,
+        tex             : true, 
+        flowChart       : true,
+        sequenceDiagram : true,
+    });
+    $(".reference-link").each(function (i,obj) {
+      console.log(obj)
+    })
+})
+</script>
+{% endblock %}

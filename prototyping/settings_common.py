@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'mdeditor',
 ]
 
 MIDDLEWARE = [
@@ -181,4 +182,17 @@ ACCOUNT_FORMS = {
     'signup' : 'accounts.forms.MySignupForm',
     'password_reset_from_key' : 'accounts.forms.MyPasswordResetFromKeyForm',
     'password_reset' : 'accounts.forms.MyPasswordResetForm',
+}
+
+#mdeditorの設定(Djangoo3.0以上は必須)
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+#Markdownファイルのアップロード先
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#Markdownエディタの言語設定
+MDEDITOR_CONFIGS = {
+    'default': {
+        'language': 'en',
+    }
 }

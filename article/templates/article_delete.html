@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load markdown_extras %}
+
+{% load static %}
+
+{% block title %}Delete Article | Prototyping Labo{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block background %}{% endblock %}
+
+{% block category %}{% endblock %}
+
+{% block contents %}
+<section class="u-content-space">
+    <div class="container">
+      <header class="text-center w-md-50 mx-auto mb-8">
+        <h2 class="h1">Do you really want to delete the article?</h2>
+        <p class="h5">Deleted articles cannot be restored</p>
+      </header>
+
+      <form class="text-center w-md-75 mx-auto" method="POST">
+        {% csrf_token %}
+
+        <div class="text-center">
+            <button class="btn btn-lg btn-primary py-3 px-4" type="submit">Delete</button>
+            <a class="btn btn-lg btn-primary py-3 px-4" href="{% url 'article:article_detail' object.pk %}">Cancel</a>
+        </div>
+      </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}{% endblock %}
