@@ -33,10 +33,10 @@ class InquiryForm(forms.Form):
         subject = 'お問い合わせ'
         message = '送信者名: {0}\nメールアドレス: {1}\nメッセージ: {2}'.format(name, email, message)
 
-        from_email = 'devteam@prototypinglabo.com'
+        from_email = 'info@prototyping-labo.com'
 
         to_list = [
-            'prototypinglabo@gmail.com'
+            'info@prototyping-labo.com'
         ]
 
         cc_list = [

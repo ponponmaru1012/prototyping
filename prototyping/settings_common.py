@@ -171,6 +171,12 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'article:index'
 #ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
 
+# django-allauthが送信するメールの件名に自動付与される接頭辞をブランクにする設定
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+
+# デフォルトのメール送信元を設定
+DEFAULT_FROM_EMAIL = 'info@prototyping-labo.com'
+
 #画像を配信するURLのホスト名以下のルートURLの設定
 MEDIA_URL = '/media/'
 
